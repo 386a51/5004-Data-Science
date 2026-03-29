@@ -24,11 +24,10 @@ def Travaling_analysis():
 	frames = (PSaH, date, Level)
 	dataset = pd.concat(frames, axis=1)
 
-
 	#cleans date from State and National to english time
 	dataset["Clean Date"] = dataset.apply(lambda row: converttoeng(row["Date"]) if row["Level"] == "County" or row["Level"] == "State" else row["Date"], axis=1)
 
-	#removes unnecisary feilds	
+	#removes unnecisary feilds
 	dataset = dataset.drop("Level", axis="columns")
 	dataset = dataset.drop("Date", axis="columns")
 
@@ -37,7 +36,17 @@ def Travaling_analysis():
 	print(dataset.head)
 #	print(dataset.dtypes)
 
-	a = dataset.groupby(["Clean Date"])["Population Staying at Home"].mean()
-	print(a.head)
+	#part 1
+	a = dataset.groupby(["Clean Date"])["Population Staying at Home"].sum()
+
+
+	#part 2
+	notstayinghome = nba["Population Not Staying at Home"]
+	distance = nba.columns[4:]
+	analysis = nba[distance].apply(pd.to_numeric, errors='coerce').sum()
+	print(analysis.head())
+
+
+
 
 Travaling_analysis()
